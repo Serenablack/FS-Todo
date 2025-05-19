@@ -10,7 +10,7 @@ interface ITodo {
 const Home: NextPage = () => {
   const [todos, setTodos] = useState<ITodo[]>([]);
   const [input, setInput] = useState("");
-  const [editIdx, setEditIdx] = useState<number | null>(null);
+  const [editId, setEditId] = useState<string | null>(null);
   const [editValue, setEditValue] = useState("");
 
   useEffect(() => {
@@ -69,8 +69,8 @@ const Home: NextPage = () => {
     }
   };
 
-  const handleEdit = (idx: number, currentValue: string) => {
-    setEditIdx(idx);
+  const handleEdit = (_id: string, currentValue: string) => {
+    setEditId(_id);
     setEditValue(currentValue);
   };
 
@@ -78,9 +78,9 @@ const Home: NextPage = () => {
     setEditValue(e.target.value);
   };
 
-  const handleEditSave = async (idx: number) => {
-    const todo = todos[idx];
-    if (!todo._id) return;
+  const handleEditSave = async (_id: string) => {
+    const todo = todos.find((t) => t._id === _id);
+    if (!todo || !todo._id) return;
     try {
       const res = await fetch("/api/todo", {
         method: "PUT",
@@ -93,8 +93,8 @@ const Home: NextPage = () => {
       });
       if (!res.ok) throw new Error("Failed to update todo");
       const updated = await res.json();
-      setTodos((prev) => prev.map((t, i) => (i === idx ? updated : t)));
-      setEditIdx(null);
+      setTodos((prev) => prev.map((t) => (t._id === _id ? updated : t)));
+      setEditId(null);
       setEditValue("");
     } catch (err) {
       console.error(err);
@@ -103,13 +103,13 @@ const Home: NextPage = () => {
   };
 
   const handleEditCancel = () => {
-    setEditIdx(null);
+    setEditId(null);
     setEditValue("");
   };
 
-  const handleToggleCompleted = async (idx: number) => {
-    const todo = todos[idx];
-    if (!todo._id) return;
+  const handleToggleCompleted = async (_id?: string) => {
+    const todo = todos.find((t) => t._id === _id);
+    if (!todo || !todo._id) return;
     const updatedTodo = { ...todo, isCompleted: !todo.isCompleted };
     try {
       const res = await fetch("/api/todo", {
@@ -123,7 +123,7 @@ const Home: NextPage = () => {
       });
       if (!res.ok) throw new Error("Failed to update todo");
       const updated = await res.json();
-      setTodos((prev) => prev.map((t, i) => (i === idx ? updated : t)));
+      setTodos((prev) => prev.map((t) => (t._id === _id ? updated : t)));
       console.log(
         `Todo '${updatedTodo.name}' isCompleted: ${updatedTodo.isCompleted}`
       );
@@ -138,17 +138,17 @@ const Home: NextPage = () => {
       <h1 className="todo-header">Todo List</h1>
       <table className="todo-table">
         <tbody>
-          {todos.map((todo, idx) => (
-            <tr key={todo._id || idx} className="todo-row">
+          {todos.map((todo) => (
+            <tr key={todo._id} className="todo-row">
               <td className="todo-cell">
                 <div className="todo-item">
                   <input
                     type="checkbox"
                     checked={todo.isCompleted}
-                    onChange={() => handleToggleCompleted(idx)}
+                    onChange={() => handleToggleCompleted(todo._id)}
                     className="todo-checkbox"
                   />
-                  {editIdx === idx ? (
+                  {editId === todo._id ? (
                     <>
                       <input
                         type="text"
@@ -157,7 +157,7 @@ const Home: NextPage = () => {
                         className="todo-input"
                       />
                       <button
-                        onClick={() => handleEditSave(idx)}
+                        onClick={() => handleEditSave(todo._id!)}
                         className="todo-btn todo-btn-save"
                         title="Save">
                         💾
@@ -179,10 +179,10 @@ const Home: NextPage = () => {
                       </span>
                       <div className="todo-btns">
                         <button
-                          onClick={() => handleEdit(idx, todo.name)}
+                          onClick={() => handleEdit(todo._id!, todo.name)}
                           className="todo-btn todo-btn-edit"
                           title="Edit"
-                          disabled={editIdx !== null}>
+                          disabled={editId !== null}>
                           ✏️
                         </button>
                         <button
