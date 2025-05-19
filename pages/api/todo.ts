@@ -9,7 +9,7 @@ import dbConnect from "../../db";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<string>,
+  res: NextApiResponse<any>
 ) {
   const { method } = req;
 
@@ -18,7 +18,7 @@ export default async function handler(
   switch (method) {
     case "GET": {
       try {
-        const todos = [];
+        const todos = await Todo.find({});
         res.status(200).json(todos);
       } catch (error) {
         res.status(500).json({ message: "Error fetching todos" });
@@ -28,7 +28,9 @@ export default async function handler(
 
     case "POST": {
       try {
-        res.status(201).json({ message: "Successfully add new todo" });
+        const { name, isCompleted } = req.body;
+        const created = await Todo.create({ name, isCompleted });
+        res.status(201).json(created);
       } catch (error) {
         res.status(500).json({ message: "Error creating todo" });
       }
@@ -37,16 +39,28 @@ export default async function handler(
 
     case "PUT": {
       try {
-        res.status(201).json({ message: "Successfully update todo" });
+        const { _id, name, isCompleted } = req.body;
+        console.log(
+          `Updating todo: _id=${_id}, newName=${name}, isCompleted=${isCompleted}`
+        );
+        const updated = await Todo.findByIdAndUpdate(
+          _id,
+          { name, isCompleted },
+          { new: true }
+        );
+        console.log(`After update, isCompleted: ${updated?.isCompleted}`);
+        res.status(201).json(updated);
       } catch (error) {
-        res.status(500).json({ message: "Error creating todo" });
+        res.status(500).json({ message: "Error updating todo" });
       }
       break;
     }
 
     case "DELETE": {
       try {
-        res.status(201).json({ message: "Successfully update todo" });
+        const { _id } = req.body;
+        const deleted = await Todo.findByIdAndDelete(_id);
+        res.status(200).json(deleted || { message: "Todo not found" });
       } catch (error) {
         res.status(500).json({ message: "Error creating todo" });
       }

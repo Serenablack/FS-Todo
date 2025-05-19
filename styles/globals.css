@@ -4,6 +4,7 @@ body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  background: #f6f8fa;
 }
 
 a {
@@ -21,4 +22,174 @@ main {
 
 .todo-list .completed {
   text-decoration: line-through;
+}
+
+.app-container {
+  max-width: 480px;
+  margin: 2.5em auto;
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.09);
+  padding: 2em 1.5em 1.5em 1.5em;
+}
+
+.todo-header {
+  text-align: center;
+  font-size: 2.1em;
+  font-weight: 700;
+  color: #1976d2;
+  margin-bottom: 1.2em;
+  letter-spacing: 1px;
+}
+
+.todo-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin-top: 1em;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+.todo-row {
+  border-bottom: 1px solid #f0f0f0;
+  transition: background 0.2s;
+}
+.todo-row:hover {
+  background: #f5faff;
+}
+.todo-cell {
+  padding: 0.7em 0.5em;
+  vertical-align: middle;
+}
+.todo-item {
+  display: flex;
+  align-items: center;
+  min-height: 2.2em;
+  gap: 0.7em;
+}
+.todo-checkbox {
+  margin-right: 0.7em;
+  accent-color: #1976d2;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  transition: box-shadow 0.2s;
+}
+.todo-checkbox:focus {
+  outline: 2px solid #1976d2;
+}
+.todo-text {
+  flex: 1;
+  word-break: break-word;
+  font-size: 1.08em;
+  color: #222;
+  transition: color 0.2s, text-decoration 0.2s;
+}
+.todo-completed {
+  text-decoration: line-through;
+  color: #888;
+}
+.todo-btns {
+  display: flex;
+  gap: 0.3em;
+  margin-left: 0.5em;
+}
+.todo-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.18em;
+  padding: 0.1em 0.3em;
+  border-radius: 4px;
+  transition: background 0.15s, color 0.15s, box-shadow 0.15s;
+  outline: none;
+}
+.todo-btn-edit {
+  color: #1976d2;
+}
+.todo-btn-edit:hover,
+.todo-btn-edit:focus {
+  background: #e3f0fc;
+  color: #125ea7;
+}
+.todo-btn-delete {
+  color: #e53935;
+}
+.todo-btn-delete:hover,
+.todo-btn-delete:focus {
+  background: #ffeaea;
+  color: #b71c1c;
+}
+.todo-input {
+  width: 70%;
+  padding: 0.3em 0.5em;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 1em;
+  transition: border 0.2s, box-shadow 0.2s;
+}
+.todo-input:focus {
+  border: 1.5px solid #1976d2;
+  box-shadow: 0 0 0 2px #e3f0fc;
+}
+.todo-btn-save {
+  margin-left: 4px;
+  color: green;
+}
+.todo-btn-save:hover,
+.todo-btn-save:focus {
+  background: #eafbe7;
+  color: #0b7a0b;
+}
+.todo-btn-cancel {
+  margin-left: 2px;
+  color: gray;
+}
+.todo-btn-cancel:hover,
+.todo-btn-cancel:focus {
+  background: #f2f2f2;
+  color: #222;
+}
+.todo-form {
+  display: flex;
+  gap: 0.7em;
+  margin-top: 1.5em;
+  justify-content: center;
+}
+.todo-form input[type="text"] {
+  flex: 1;
+  min-width: 0;
+}
+.todo-form button[type="submit"] {
+  background: #1976d2;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 0.45em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.18s, box-shadow 0.18s;
+  box-shadow: 0 1px 4px rgba(25, 118, 210, 0.07);
+}
+.todo-form button[type="submit"]:hover,
+.todo-form button[type="submit"]:focus {
+  background: #125ea7;
+}
+
+@media (max-width: 600px) {
+  .app-container {
+    padding: 1em 0.3em 1em 0.3em;
+  }
+  .todo-header {
+    font-size: 1.3em;
+  }
+  .todo-input {
+    font-size: 0.98em;
+  }
+  .todo-form button[type="submit"] {
+    font-size: 0.98em;
+    padding: 0.4em 0.7em;
+  }
 }

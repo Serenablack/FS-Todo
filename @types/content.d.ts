@@ -1,4 +1,5 @@
 interface ITodo {
-  name: string
-  isCompleted: boolean
+  _id?: string;
+  name: string;
+  isCompleted: boolean;
 }
